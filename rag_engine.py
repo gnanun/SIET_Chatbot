@@ -81,8 +81,7 @@ def retrieve_content(question, embed_model, chunks, index, num_chunks=3):
     return background  # Returns the relevant document content.
 
 # 6. ASK RAG
-def ask_rag(question, embed_model, chunks, index, api_key,
-            num_chunks=3, model_name="openai/gpt-oss-120b"):
+def ask_rag(question, embed_model, chunks, index, api_key, num_chunks=3, model_name="openai/gpt-oss-120b"):
 
     if not api_key:  # Checks whether the API key is available.
         raise ValueError("API Key Missing")
