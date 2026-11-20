@@ -2,7 +2,7 @@ import faiss  # Used for similarity search.
 import numpy as np  # Used for numerical operations.
 from groq import Groq  # Connects to Groq LLM.
 from pypdf import PdfReader  # Reads PDF files.
-from sentence_transformers import SentenceTransformer  # Generates text embeddings.
+from sentence-transformers import SentenceTransformer  # Generates text embeddings.
 
 
 # 1. LOAD PDF
