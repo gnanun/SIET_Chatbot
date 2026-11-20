@@ -1,7 +1,7 @@
 streamlit
 sentence_transformers
 pypdf
-faiss-cpu
+faiss
 groq
 numpy
 
