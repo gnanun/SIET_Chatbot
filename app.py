@@ -26,7 +26,7 @@ if question:
   st.session_state.chat_hist.append(
     {
       "role":"user",
-      "content"=question
+      "content":question
     }
   )
   with st.chat_messege("user"):
