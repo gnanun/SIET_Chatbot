@@ -55,7 +55,7 @@ def load_base(pdf_path="01_College_Information.pdf"):
     chunks = create_chunks(full_text)  # Splits text into overlapping chunks.
     embed_model, index = build_vectors(chunks)  # Generates embeddings and builds the index.
 
-    return embed_model, chunks, index  # Returns all required RAG components.
+    return index, embed_model, chunks  # Returns all required RAG components.
 
 
 # 5. RETRIEVE CONTENT
@@ -79,3 +79,36 @@ def retrieve_content(question, embed_model, chunks, index, num_chunks=3):
             background += chunks[i] + "\n\n"  # Adds retrieved text to the background.
 
     return background  # Returns the relevant document content.
+
+# 6. ASK RAG
+def ask_rag(question, embed_model, chunks, index, api_key,
+            num_chunks=3, model_name="openai/gpt-oss-120b"):
+
+    if not api_key:  # Checks whether the API key is available.
+        raise ValueError("API Key Missing")
+
+    background = retrieve_content(question, embed_model, chunks, index, num_chunks)  # Retrieves relevant PDF content.
+
+    prompt = f"""You are a professional AI Assistant.
+    Answer the user's question using ONLY the document background below.
+    Do not invent or assume facts.
+    If information is unavailable, say Information Missing.
+
+    Document Background:
+    {background}
+
+    User Question:
+    {question}
+
+    Answer:
+    """  # Creates a prompt using retrieved content and the user question.
+
+    client = Groq(api_key=api_key)  # Creates a Groq API client.
+
+    response = client.chat.completions.create(  # Sends the prompt to the Groq model.
+        model=model_name,  # Specifies the language model.
+        messages=[{"role": "user", "content": prompt}],  # Passes the prompt as a user message.
+        temperature=0.3  # Controls the randomness of the generated answer.
+    )
+
+    return response.choices[0].message.content  # Returns the generated answer.
